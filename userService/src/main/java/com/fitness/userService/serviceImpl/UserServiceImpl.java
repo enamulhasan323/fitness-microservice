@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
         return getUserResponse(user);
     }
 
+    @Override
+    public Boolean existByUserId(String userId) {
+        return userRepository.existsById(userId);
+    }
+
     private UserResponse getUserResponse(User user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());

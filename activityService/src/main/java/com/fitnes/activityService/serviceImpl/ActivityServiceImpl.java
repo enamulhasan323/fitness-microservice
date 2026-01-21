@@ -6,6 +6,7 @@ import com.fitnes.activityService.dto.ActivityResponse;
 import com.fitnes.activityService.model.Activity;
 import com.fitnes.activityService.repository.ActivityRepository;
 import com.fitnes.activityService.service.ActivityService;
+import com.fitnes.activityService.service.UserValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,15 @@ import java.util.List;
 public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final UserValidationService userValidationService;
 
     @Override
     public ActivityResponse trackActivity(ActivityRequest activityRequest) {
 
+        Boolean isValidUser=userValidationService.validateUser(activityRequest.getUserId());
+        if(!isValidUser){
+            throw new IllegalArgumentException("Invalid user ID: "+activityRequest.getUserId());
+        }
         Activity activity= Activity.builder()
                 .userId(activityRequest.getUserId())
                 .activityType(activityRequest.getActivityType())
